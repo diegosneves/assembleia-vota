@@ -78,7 +78,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: diegoneves/clean-architecture:${{ env.BRANCH_NAME }}
+          tags: diegoneves/assembleia-vota:${{ env.BRANCH_NAME }}
           build-args: |
             DB_NAME=${{ env.DB_NAME }}
             DB_PASSWORD=${{ env.DB_PASSWORD }}
