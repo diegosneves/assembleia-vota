@@ -20,7 +20,7 @@ import lombok.Setter;
  *   <li><code>topicId</code>: Uma string representando o identificador único do tópico.</li>
  *   <li><code>title</code>: Uma string representando o título do tópico.</li>
  *   <li><code>description</code>: Uma string representando a descrição do tópico.</li>
- *   <li><code>votingSessionDuration</code>: Um inteiro representando a duração da sessão de votação do tópico.</li>
+ *   <li><code>votingSessionDuration</code>: Um inteiro representando a duração da sessão de votação do tópico em minutos.</li>
  *  </ul>
  * <p>
  * Esta classe fornece os getters e setters necessários para acessar e modificar
