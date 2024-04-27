@@ -1,6 +1,7 @@
 package diegosneves.github.assembleiavota.services;
 
 import diegosneves.github.assembleiavota.enums.ExceptionHandler;
+import diegosneves.github.assembleiavota.exceptions.InvalidTopicIntegerException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
 import diegosneves.github.assembleiavota.models.TopicEntity;
 import diegosneves.github.assembleiavota.repositories.TopicEntityRepository;
@@ -168,7 +169,7 @@ class TopicServiceTest {
                 .build();
         when(this.topicEntityRepository.save(any(TopicEntity.class))).thenReturn(this.topicEntity);
 
-        InvalidTopicStringAttributeException actual = assertThrows(InvalidTopicStringAttributeException.class, () -> this.topicService.createNewTopic(topicRequest));
+        InvalidTopicIntegerException actual = assertThrows(InvalidTopicIntegerException.class, () -> this.topicService.createNewTopic(topicRequest));
 
         verify(this.topicEntityRepository, never()).save(any(TopicEntity.class));
 
