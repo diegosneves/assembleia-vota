@@ -1,6 +1,7 @@
 package diegosneves.github.assembleiavota.services;
 
-import diegosneves.github.assembleiavota.exceptions.TopicAttributeException;
+import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
+import diegosneves.github.assembleiavota.exceptions.InvalidTopicIntegerException;
 import diegosneves.github.assembleiavota.factory.TopicEntityFactory;
 import diegosneves.github.assembleiavota.mapper.BuilderMapper;
 import diegosneves.github.assembleiavota.models.TopicEntity;
@@ -11,8 +12,6 @@ import diegosneves.github.assembleiavota.services.contract.TopicServiceContract;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import static diegosneves.github.assembleiavota.enums.ExceptionHandler.TOPIC_NON_NULL_INTEGER_ATTRIBUTE;
 
 @Service
 @Slf4j
@@ -31,7 +30,7 @@ public class TopicService implements TopicServiceContract {
     }
 
     @Override
-    public TopicCreatedResponse createNewTopic(TopicRequest topicRequest) throws TopicAttributeException {
+    public TopicCreatedResponse createNewTopic(TopicRequest topicRequest) throws InvalidTopicStringAttributeException {
         TopicEntity topicEntity = validateTopic(topicRequest.getTitle(), topicRequest.getDescription(), topicRequest.getVotingSessionDuration());
 
         this.topicEntityRepository.save(topicEntity);
@@ -47,9 +46,9 @@ public class TopicService implements TopicServiceContract {
      * @param description           A descrição do tópico a ser validada.
      * @param votingSessionDuration A duração da sessão de votação a ser validada.
      * @return Retorna uma nova entidade de tópico se a validação for bem-sucedida.
-     * @throws TopicAttributeException Se algum dos atributos for inválido, uma exceção será lançada.
+     * @throws InvalidTopicStringAttributeException Se algum dos atributos for inválido, uma exceção será lançada.
      */
-    private static TopicEntity validateTopic(String title, String description, Integer votingSessionDuration) throws TopicAttributeException {
+    private static TopicEntity validateTopic(String title, String description, Integer votingSessionDuration) throws InvalidTopicStringAttributeException {
         return TopicEntityFactory.create(
                 validateTopicField(TOPIC_TITLE, title),
                 validateTopicField(TOPIC_DESCRIPTION, description),
@@ -62,13 +61,13 @@ public class TopicService implements TopicServiceContract {
      * @param field O nome do campo referente ao tópico.
      * @param value O valor a ser validado.
      * @return Retorna o valor se este for válido.
-     * @throws TopicAttributeException Se o valor for nulo, vazio ou em branco,
+     * @throws InvalidTopicStringAttributeException Se o valor for nulo, vazio ou em branco,
      *                                 lança uma exceção com uma mensagem de erro, indicando qual campo é inválido.
      */
-    private static String validateTopicField(String field, String value) throws TopicAttributeException {
+    private static String validateTopicField(String field, String value) throws InvalidTopicStringAttributeException {
         if (value == null || value.trim().isEmpty() || value.trim().isBlank()) {
-            log.error(TopicAttributeException.ERROR.getMessage(field));
-            throw new TopicAttributeException(field);
+            log.error(InvalidTopicStringAttributeException.ERROR.getMessage(field));
+            throw new InvalidTopicStringAttributeException(field);
         }
         return value.trim();
     }
@@ -79,12 +78,12 @@ public class TopicService implements TopicServiceContract {
      * @param field O nome do campo referente ao tópico.
      * @param value O valor a ser validado.
      * @return o valor validado; se o valor inicial for menor do que o valor padrão, retorna o valor padrão.
-     * @throws TopicAttributeException se o valor do campo for nulo.
+     * @throws InvalidTopicStringAttributeException se o valor do campo for nulo.
      */
-    private static Integer validateTopicField(String field, Integer value) throws TopicAttributeException {
+    private static Integer validateTopicField(String field, Integer value) throws InvalidTopicStringAttributeException {
         if (value == null) {
-            log.error(TOPIC_NON_NULL_INTEGER_ATTRIBUTE.getMessage(field));
-            throw new TopicAttributeException(TOPIC_NON_NULL_INTEGER_ATTRIBUTE, field);
+            log.error(InvalidTopicIntegerException.ERROR.getMessage(field));
+            throw new InvalidTopicIntegerException(field);
         }
         return value < DEFAULT_VALUE ? DEFAULT_VALUE : value;
     }

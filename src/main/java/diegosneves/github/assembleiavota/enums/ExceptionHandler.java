@@ -13,7 +13,7 @@ public enum ExceptionHandler {
 
     CONSTRUCTOR_DEFAULT_UNDEFINED("Classe [ %s ] deve declarar um construtor padrão.", HttpStatus.NOT_IMPLEMENTED),
     CLASS_MAPPING_FAILURE("Falha ao tentar mapear a classe [ %s ].", HttpStatus.INTERNAL_SERVER_ERROR),
-    TOPIC_ATTRIBUTE_INVALID("O [%s] não pode ser nulo ou vazio", HttpStatus.BAD_REQUEST),
+    TOPIC_ATTRIBUTE_INVALID("O campo [%s] não pode ser nulo ou vazio", HttpStatus.BAD_REQUEST),
     TOPIC_NON_NULL_INTEGER_ATTRIBUTE("A [%s] não pode ser nula", HttpStatus.BAD_REQUEST),
     INVALID_UUID_FORMAT_MESSAGE("O ID [%s] precisa ser no formato UUID", HttpStatus.INTERNAL_SERVER_ERROR);
 
