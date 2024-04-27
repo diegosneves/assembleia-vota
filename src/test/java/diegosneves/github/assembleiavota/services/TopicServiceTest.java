@@ -1,7 +1,7 @@
 package diegosneves.github.assembleiavota.services;
 
 import diegosneves.github.assembleiavota.enums.ExceptionHandler;
-import diegosneves.github.assembleiavota.exceptions.TopicAttributeException;
+import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
 import diegosneves.github.assembleiavota.models.TopicEntity;
 import diegosneves.github.assembleiavota.repositories.TopicEntityRepository;
 import diegosneves.github.assembleiavota.requests.TopicRequest;
@@ -117,7 +117,7 @@ class TopicServiceTest {
                 .build();
         when(this.topicEntityRepository.save(any(TopicEntity.class))).thenReturn(this.topicEntity);
 
-        TopicAttributeException actual = assertThrows(TopicAttributeException.class, () -> this.topicService.createNewTopic(topicRequest));
+        InvalidTopicStringAttributeException actual = assertThrows(InvalidTopicStringAttributeException.class, () -> this.topicService.createNewTopic(topicRequest));
 
         verify(this.topicEntityRepository, never()).save(any(TopicEntity.class));
 
@@ -134,7 +134,7 @@ class TopicServiceTest {
                 .build();
         when(this.topicEntityRepository.save(any(TopicEntity.class))).thenReturn(this.topicEntity);
 
-        TopicAttributeException actual = assertThrows(TopicAttributeException.class, () -> this.topicService.createNewTopic(topicRequest));
+        InvalidTopicStringAttributeException actual = assertThrows(InvalidTopicStringAttributeException.class, () -> this.topicService.createNewTopic(topicRequest));
 
         verify(this.topicEntityRepository, never()).save(any(TopicEntity.class));
 
@@ -151,7 +151,7 @@ class TopicServiceTest {
                 .build();
         when(this.topicEntityRepository.save(any(TopicEntity.class))).thenReturn(this.topicEntity);
 
-        TopicAttributeException actual = assertThrows(TopicAttributeException.class, () -> this.topicService.createNewTopic(topicRequest));
+        InvalidTopicStringAttributeException actual = assertThrows(InvalidTopicStringAttributeException.class, () -> this.topicService.createNewTopic(topicRequest));
 
         verify(this.topicEntityRepository, never()).save(any(TopicEntity.class));
 
@@ -168,7 +168,7 @@ class TopicServiceTest {
                 .build();
         when(this.topicEntityRepository.save(any(TopicEntity.class))).thenReturn(this.topicEntity);
 
-        TopicAttributeException actual = assertThrows(TopicAttributeException.class, () -> this.topicService.createNewTopic(topicRequest));
+        InvalidTopicStringAttributeException actual = assertThrows(InvalidTopicStringAttributeException.class, () -> this.topicService.createNewTopic(topicRequest));
 
         verify(this.topicEntityRepository, never()).save(any(TopicEntity.class));
 
