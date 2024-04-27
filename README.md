@@ -1,6 +1,6 @@
 # Assembleia Vota
 
-[![CI Prod](https://github.com/diegosneves/assembleia-vota/actions/workflows/ci-prod.yaml/badge.svg)](https://github.com/diegosneves/assembleia-vota/actions/workflows/ci-prod.yaml) [![CI Develop](https://github.com/diegosneves/assembleia-vota/actions/workflows/ci-develop.yaml/badge.svg)](https://github.com/diegosneves/assembleia-vota/actions/workflows/ci-develop.yaml)
+[![Linkedin badge](https://img.shields.io/badge/-Linkedin-blue?flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/diego-neves-224208177/)](https://www.linkedin.com/in/diego-neves-224208177/) [![CI Prod](https://github.com/diegosneves/assembleia-vota/actions/workflows/ci-prod.yaml/badge.svg)](https://github.com/diegosneves/assembleia-vota/actions/workflows/ci-prod.yaml) [![CI Develop](https://github.com/diegosneves/assembleia-vota/actions/workflows/ci-develop.yaml/badge.svg)](https://github.com/diegosneves/assembleia-vota/actions/workflows/ci-develop.yaml)
 ## Resumo da Aplicação de Votação
 
 Esta aplição é destinada a gerenciar e facilitar o processo de votação dentro do ambiente cooperativo. Utilizando uma API REST, a aplicação oferece os seguintes recursos:
@@ -15,6 +15,34 @@ Cada associado é identificado por um ID único e só pode votar uma vez por pau
 A segurança das interfaces foi abstraída e todas as chamadas para as interfaces são consideradas autorizadas.
 
 O foco principal está na comunicação com o backend, onde as mensagens no formato JSON são trocadas. Vale ressaltar que o projeto não inclui a aplicação cliente, somente os componentes do servidor são avaliados.
+
+---
+
+## Arquitetura do Projeto
+
+Escolhemos utilizar a arquitetura Model-View-Controller (MVC) para estruturar nosso projeto. Aqui estão algumas razões para esta escolha:
+
+1. **Separação de Concerns**: A arquitetura MVC nos permite dividir a aplicação em três partes distintas - Model, View e Controller. Isso facilita o gerenciamento e a manutenção do código.
+
+2. **Desenvolvimento Paralelo**: Dividindo a aplicação em partes distintas, diferentes desenvolvedores podem trabalhar em diferentes partes da aplicação simultaneamente sem interferência.
+
+3. **Reutilização de Código & Modulação**: MVC permite um alto grau de reutilização de código e modularidade. Os componentes são facilmente intercambiáveis e reutilizáveis.
+
+Neste projeto:
+
+- **Model**: Representa as classes de domínio, as regras de negócios, lógica e funções. Aqui temos as classes que representam as Pautas e Votos.
+
+- **View**: Como estamos trabalhando com uma API REST, aqui seria onde formatamos a resposta do servidor para JSON.
+
+- **Controller**: Controla a relação entre a Model e a View. Ele recebe os inputs do usuário, processa a requisição e retorna a resposta para o cliente.
+
+Ao adotar a arquitetura MVC, esperamos construir uma aplicação organizada, responsiva e de fácil manutenção.
+
+---
+
+## Swagger
+
+- [Swagger - Local](http://localhost:8080/swagger-ui/index.html)
 
 ---
 
@@ -109,3 +137,4 @@ O serviço agora está rodando e pode ser acessado na porta `8080`.
 > Lembre-se de substituir `"sua_base_de_dados"` e `"sua_senha"` com as informações reais do seu banco de dados. Além disso, é importante lembrar que **versões** diferentes do `Docker` e do `Docker Compose` podem ter diferentes sintaxes e comportamentos, portanto, garanta que você está usando a mesma versão para evitar problemas.
 
 ---
+
