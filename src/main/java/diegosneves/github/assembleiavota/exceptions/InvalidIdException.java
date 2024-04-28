@@ -8,11 +8,15 @@ import diegosneves.github.assembleiavota.enums.ExceptionHandler;
  * @see RuntimeException
  * @author diegoneves
  */
-public class InvalidTopicIdException extends RuntimeException {
+public class InvalidIdException extends RuntimeException {
 
     public static final ExceptionHandler ERROR = ExceptionHandler.INVALID_ID_FORMAT;
 
-    public InvalidTopicIdException(String message, Throwable e) {
+    public InvalidIdException(String message, Throwable e) {
         super(ERROR.getMessage(message), e);
+    }
+
+    public InvalidIdException(String message) {
+        super(ERROR.getMessage(message));
     }
 }
