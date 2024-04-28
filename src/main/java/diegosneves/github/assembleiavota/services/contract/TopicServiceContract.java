@@ -1,6 +1,6 @@
 package diegosneves.github.assembleiavota.services.contract;
 
-import diegosneves.github.assembleiavota.exceptions.InvalidTopicIdException;
+import diegosneves.github.assembleiavota.exceptions.InvalidIdException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
 import diegosneves.github.assembleiavota.exceptions.TopicIdNotFoundException;
 import diegosneves.github.assembleiavota.models.TopicEntity;
@@ -32,9 +32,9 @@ public interface TopicServiceContract {
      *
      * @param topicId O identificador do tópico que será obtido.
      * @return O objeto {@link TopicEntity} correspondente ao {@link java.util.UUID ID} do tópico fornecido.
-     * @throws InvalidTopicIdException  Se o {@link java.util.UUID ID} do tópico fornecido for inválido.
+     * @throws InvalidIdException  Se o {@link java.util.UUID ID} do tópico fornecido for inválido.
      * @throws TopicIdNotFoundException Se o tópico com o {@link java.util.UUID ID} fornecido não for encontrado.
      */
-    TopicEntity getTopic(String topicId) throws InvalidTopicIdException, TopicIdNotFoundException;
+    TopicEntity getTopic(String topicId) throws InvalidIdException, TopicIdNotFoundException;
 
 }

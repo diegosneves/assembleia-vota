@@ -1,9 +1,8 @@
 package diegosneves.github.assembleiavota.services;
 
-import diegosneves.github.assembleiavota.enums.ExceptionHandler;
-import diegosneves.github.assembleiavota.exceptions.InvalidTopicIdException;
-import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
+import diegosneves.github.assembleiavota.exceptions.InvalidIdException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicIntegerException;
+import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
 import diegosneves.github.assembleiavota.exceptions.TopicIdNotFoundException;
 import diegosneves.github.assembleiavota.exceptions.UuidUtilsException;
 import diegosneves.github.assembleiavota.factory.TopicEntityFactory;
@@ -21,15 +20,17 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import static diegosneves.github.assembleiavota.enums.ExceptionHandler.TOPIC_ID_NOT_FOUND;
+import static java.util.Objects.isNull;
 
 @Service
 @Slf4j
 public class TopicService implements TopicServiceContract {
 
-    private static final String TOPIC_TITLE = "Titulo";
-    private static final String TOPIC_DESCRIPTION = "Descrição";
-    private static final String VOTING_DURATION = "Duração";
-    private static final int DEFAULT_VALUE = 1;
+    public static final String TOPIC_TITLE = "Titulo";
+    public static final String TOPIC_DESCRIPTION = "Descrição";
+    public static final String VOTING_DURATION = "Duração";
+    public static final int DEFAULT_VALUE = 1;
+    public static final String TOPIC_ID_NULL_ERROR = "da Pauta não pode ser nulo e";
 
     private final TopicEntityRepository topicEntityRepository;
 
@@ -48,12 +49,12 @@ public class TopicService implements TopicServiceContract {
     }
 
     @Override
-    public TopicEntity getTopic(String topicId) throws InvalidTopicIdException, TopicIdNotFoundException {
-        Optional<TopicEntity> topicEntityOptional = topicEntityRepository.findByTopicId(validateTopicId(topicId));
+    public TopicEntity getTopic(String topicId) throws InvalidIdException, TopicIdNotFoundException {
+        Optional<TopicEntity> topicEntityOptional = this.topicEntityRepository.findByTopicId(validateTopicId(topicId));
         if (topicEntityOptional.isPresent()) {
             return topicEntityOptional.get();
         } else {
-            log.warn(TOPIC_ID_NOT_FOUND.getMessage(topicId));
+            log.error(TOPIC_ID_NOT_FOUND.getMessage(topicId));
             throw new TopicIdNotFoundException(topicId);
         }
     }
@@ -63,15 +64,19 @@ public class TopicService implements TopicServiceContract {
      *
      * @param topicId o {@link java.util.UUID ID} do tópico a ser validado
      * @return o {@link java.util.UUID ID} do tópico após ser validado e devidamente formatado
-     * @throws InvalidTopicIdException se o {@link java.util.UUID ID} do tópico não estiver no formato {@link java.util.UUID UUID}
+     * @throws InvalidIdException se o {@link java.util.UUID ID} do tópico não estiver no formato {@link java.util.UUID UUID}
      */
-    private static String validateTopicId(String topicId) throws InvalidTopicIdException {
+    private static String validateTopicId(String topicId) throws InvalidIdException {
+        if (isNull(topicId)) {
+            log.error(InvalidIdException.ERROR.getMessage(TOPIC_ID_NULL_ERROR));
+            throw new InvalidIdException(TOPIC_ID_NULL_ERROR);
+        }
         try {
             UuidUtils.isValidUUID(topicId.trim());
             return topicId.trim();
         } catch (UuidUtilsException e) {
             log.error(e.getMessage(), e);
-            throw new InvalidTopicIdException(topicId.trim(), e);
+            throw new InvalidIdException(topicId.trim(), e);
         }
     }
 
