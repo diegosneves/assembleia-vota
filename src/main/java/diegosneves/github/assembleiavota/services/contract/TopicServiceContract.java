@@ -5,6 +5,11 @@ import diegosneves.github.assembleiavota.requests.TopicRequest;
 import diegosneves.github.assembleiavota.responses.TopicCreatedResponse;
 
 
+/**
+ * Esta interface define o contrato para um Serviço de Tópicos. Ela fornece um método para criar um novo tópico.
+ *
+ * @author diegoneves
+ */
 public interface TopicServiceContract {
 
     /**
