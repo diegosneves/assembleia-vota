@@ -1,6 +1,5 @@
 package diegosneves.github.assembleiavota.mapper;
 
-import diegosneves.github.assembleiavota.enums.ExceptionHandler;
 import diegosneves.github.assembleiavota.exceptions.ConstructorDefaultUndefinedException;
 import diegosneves.github.assembleiavota.exceptions.MapperFailureException;
 import lombok.extern.slf4j.Slf4j;
@@ -67,12 +66,12 @@ public class BuilderMapper {
      * @param strategy a estratégia a ser usada para construir o objeto de destino (opcional)
      * @return uma instância da classe destino com seus campos preenchidos
      */
-    public static <T, E> T mapTo(Class<T> destinationClass, E source, BuildingStrategy<T, E> strategy) {
+    public static <T, E> T mapTo(Class<T> destinationClass, E source, MapperStrategy<T, E> strategy) {
 		if (strategy == null) {
 			return BuilderMapper.mapTo(destinationClass, source);
 		}
 
-		return strategy.mapTo(source);
+		return strategy.mapFrom(source);
 	}
 
 }

@@ -13,9 +13,14 @@ public enum ExceptionHandler {
 
     CONSTRUCTOR_DEFAULT_UNDEFINED("Classe [ %s ] deve declarar um construtor padrão.", HttpStatus.NOT_IMPLEMENTED),
     CLASS_MAPPING_FAILURE("Falha ao tentar mapear a classe [ %s ].", HttpStatus.INTERNAL_SERVER_ERROR),
-    TOPIC_ATTRIBUTE_INVALID("O campo [%s] não pode ser nulo ou vazio", HttpStatus.BAD_REQUEST),
-    TOPIC_NON_NULL_INTEGER_ATTRIBUTE("A [%s] não pode ser nula", HttpStatus.BAD_REQUEST),
-    INVALID_UUID_FORMAT_MESSAGE("O ID [%s] precisa ser no formato UUID", HttpStatus.INTERNAL_SERVER_ERROR);
+    TOPIC_ATTRIBUTE_INVALID("O campo %s não pode ser nulo ou vazio", HttpStatus.BAD_REQUEST),
+    TOPIC_NON_NULL_INTEGER_ATTRIBUTE("A %s não pode ser nula", HttpStatus.BAD_REQUEST),
+    TOPIC_ID_NOT_FOUND("O ID %s do tópico não foi encontrado", HttpStatus.NOT_FOUND),
+    SESSION_ID_NOT_FOUND("O ID %s da Sessão não foi encontrado", HttpStatus.NOT_FOUND),
+    SESSION_ERROR_MESSAGE("Ocorreu um erro na Session devido ao seguinte motivo: %s", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_ID_FORMAT("O ID %s precisa estar no formato UUID (Identificador Único Universal)", HttpStatus.BAD_REQUEST),
+    FAILURE_CREATE_SESSION("O sistema falhou ao tentar estabelecer uma nova sessão de votação devido ao seguinte motivo: %s", HttpStatus.BAD_REQUEST),
+    INVALID_UUID_FORMAT_MESSAGE("O ID %s precisa estar no formato UUID", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String message;
     private final HttpStatus httpStatus;

@@ -2,9 +2,14 @@ package diegosneves.github.assembleiavota.config.handler;
 
 import diegosneves.github.assembleiavota.dto.ExceptionDTO;
 import diegosneves.github.assembleiavota.exceptions.ConstructorDefaultUndefinedException;
+import diegosneves.github.assembleiavota.exceptions.IllegalSessionArgumentException;
+import diegosneves.github.assembleiavota.exceptions.InvalidIdException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicIntegerException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
 import diegosneves.github.assembleiavota.exceptions.MapperFailureException;
+import diegosneves.github.assembleiavota.exceptions.SessionCreateFailureException;
+import diegosneves.github.assembleiavota.exceptions.SessionNotFound;
+import diegosneves.github.assembleiavota.exceptions.TopicIdNotFoundException;
 import diegosneves.github.assembleiavota.exceptions.UuidUtilsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -105,6 +110,69 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ExceptionDTO> uuidUtilsRelatedFaileures(UuidUtilsException exception) {
         ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), UuidUtilsException.ERROR.getStatusCodeValue());
         return ResponseEntity.status(UuidUtilsException.ERROR.getHttpStatusCode()).body(dto);
+    }
+
+    /**
+     * Manipulador de exceções para falhas relacionadas ao tópico.
+     *
+     * @param exception uma exceção do tipo {@link TopicIdNotFoundException}, representando a situação onde um ID de tópico não foi encontrado.
+     * @return ResponseEntity, que encapsula tanto a resposta HTTP como o corpo do DTO de exceção ({@link ExceptionDTO}).
+     * A resposta HTTP contém o status do erro obtido da exceção TopicIdNotFoundException e o corpo contém a mensagem da exceção e o código do status.
+     */
+    @ExceptionHandler(TopicIdNotFoundException.class)
+    public ResponseEntity<ExceptionDTO> topicRelatedFaileures(TopicIdNotFoundException exception) {
+        ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), TopicIdNotFoundException.ERROR.getStatusCodeValue());
+        return ResponseEntity.status(TopicIdNotFoundException.ERROR.getHttpStatusCode()).body(dto);
+    }
+
+    /**
+     * Manipulador de exceções para falhas relacionadas ao ID.
+     * Esse método é chamado quando uma exceção do tipo {@link InvalidIdException} é lançada.
+     *
+     * @param exception A exceção lançada que contém informações sobre a falha no ID.
+     * @return Uma resposta de entidade contendo o status HTTP correspondente à exceção e o dto contendo a mensagem da exceção.
+     */
+    @ExceptionHandler(InvalidIdException.class)
+    public ResponseEntity<ExceptionDTO> idRelatedFaileures(InvalidIdException exception) {
+        ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), InvalidIdException.ERROR.getStatusCodeValue());
+        return ResponseEntity.status(InvalidIdException.ERROR.getHttpStatusCode()).body(dto);
+    }
+
+    /**
+     * Manipula exceções de falha na criação de sessões.
+     *
+     * @param exception Exceção de falha na criação de sessão que foi lançada.
+     * @return Um ResponseEntity que contém um DTO de exceção, com a mensagem de erro e o código de status da exceção.
+     */
+    @ExceptionHandler(SessionCreateFailureException.class)
+    public ResponseEntity<ExceptionDTO> sessionRelatedFaileures(SessionCreateFailureException exception) {
+        ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), SessionCreateFailureException.ERROR.getStatusCodeValue());
+        return ResponseEntity.status(SessionCreateFailureException.ERROR.getHttpStatusCode()).body(dto);
+    }
+
+    /**
+     * Manipulador de exceções para situações onde a sessão não é encontrada.
+     *
+     * @param exception A exceção de Sessão Não Encontrada que foi lançada.
+     * @return Uma instância de ResponseEntity contendo os detalhes da exceção capturada,
+     * que inclui a mensagem da exceção e o código de status da HTTP Response.
+     */
+    @ExceptionHandler(SessionNotFound.class)
+    public ResponseEntity<ExceptionDTO> sessionRelatedFaileures(SessionNotFound exception) {
+        ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), SessionNotFound.ERROR.getStatusCodeValue());
+        return ResponseEntity.status(SessionNotFound.ERROR.getHttpStatusCode()).body(dto);
+    }
+
+    /**
+     * Manipulador de exceções para lidar com argumentos de sessão inválidos.
+     *
+     * @param exception A exceção lançada por uma sessão ilegal ou argumentos inválidos.
+     * @return Uma resposta de entidade contendo a mensagem da exceção original e o código de status HTTP correspondente.
+     */
+    @ExceptionHandler(IllegalSessionArgumentException.class)
+    public ResponseEntity<ExceptionDTO> sessionRelatedFaileures(IllegalSessionArgumentException exception) {
+        ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), IllegalSessionArgumentException.ERROR.getStatusCodeValue());
+        return ResponseEntity.status(IllegalSessionArgumentException.ERROR.getHttpStatusCode()).body(dto);
     }
 
 }
