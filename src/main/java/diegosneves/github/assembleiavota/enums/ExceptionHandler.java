@@ -15,7 +15,9 @@ public enum ExceptionHandler {
     CLASS_MAPPING_FAILURE("Falha ao tentar mapear a classe [ %s ].", HttpStatus.INTERNAL_SERVER_ERROR),
     TOPIC_ATTRIBUTE_INVALID("O campo [%s] não pode ser nulo ou vazio", HttpStatus.BAD_REQUEST),
     TOPIC_NON_NULL_INTEGER_ATTRIBUTE("A [%s] não pode ser nula", HttpStatus.BAD_REQUEST),
-    INVALID_UUID_FORMAT_MESSAGE("O ID [%s] precisa ser no formato UUID", HttpStatus.INTERNAL_SERVER_ERROR);
+    TOPIC_ID_NOT_FOUND("O ID %s do tópico não foi encontrado", HttpStatus.NOT_FOUND),
+    INVALID_ID_FORMAT("O ID [%s] precisa estar no formato UUID (Identificador Único Universal)", HttpStatus.BAD_REQUEST),
+    INVALID_UUID_FORMAT_MESSAGE("O ID [%s] precisa estar no formato UUID", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String message;
     private final HttpStatus httpStatus;
