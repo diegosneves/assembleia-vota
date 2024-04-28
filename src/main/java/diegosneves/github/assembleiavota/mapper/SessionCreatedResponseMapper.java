@@ -4,10 +4,10 @@ import diegosneves.github.assembleiavota.dto.TopicEntityDTO;
 import diegosneves.github.assembleiavota.models.SessionEntity;
 import diegosneves.github.assembleiavota.responses.SessionCreatedResponse;
 
-public class SessionCreatedResponseMapper implements BuildingStrategy<SessionCreatedResponse, SessionEntity> {
+public class SessionCreatedResponseMapper implements MapperStrategy<SessionCreatedResponse, SessionEntity> {
 
     @Override
-    public SessionCreatedResponse mapTo(SessionEntity origem) {
+    public SessionCreatedResponse mapFrom(SessionEntity origem) {
         return SessionCreatedResponse.builder()
                 .sessionId(origem.getSessionId())
                 .topicEntityDTO(BuilderMapper.mapTo(TopicEntityDTO.class, origem.getTopic()))
