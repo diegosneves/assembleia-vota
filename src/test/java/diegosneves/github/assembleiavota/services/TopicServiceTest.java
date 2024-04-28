@@ -1,8 +1,10 @@
 package diegosneves.github.assembleiavota.services;
 
 import diegosneves.github.assembleiavota.enums.ExceptionHandler;
+import diegosneves.github.assembleiavota.exceptions.InvalidTopicIdException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicIntegerException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
+import diegosneves.github.assembleiavota.exceptions.TopicIdNotFoundException;
 import diegosneves.github.assembleiavota.models.TopicEntity;
 import diegosneves.github.assembleiavota.repositories.TopicEntityRepository;
 import diegosneves.github.assembleiavota.requests.TopicRequest;
@@ -16,6 +18,8 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -175,6 +179,62 @@ class TopicServiceTest {
 
         assertNotNull(actual);
         assertEquals(ExceptionHandler.TOPIC_NON_NULL_INTEGER_ATTRIBUTE.getMessage(VOTING_DURATION), actual.getMessage());
+    }
+
+    @Test
+    void shouldRetrieveValidTopicById() {
+        when(this.topicEntityRepository.findByTopicId(UUID_TEST)).thenReturn(Optional.ofNullable(this.topicEntity));
+
+        TopicEntity actual = this.topicService.getTopic(UUID_TEST);
+
+        verify(this.topicEntityRepository, times(1)).findByTopicId(UUID_TEST);
+
+        assertNotNull(actual);
+        assertEquals(UUID_TEST, actual.getTopicId());
+        assertEquals("Votacao", actual.getTitle());
+        assertEquals("Motivo", actual.getDescription());
+        assertEquals(2, actual.getVotingSessionDuration());
+        assertEquals(this.topicEntity, actual);
+    }
+
+    @Test
+    void shouldRetrieveValidTopicByIdWhenIdHasTrailingSpace() {
+        when(this.topicEntityRepository.findByTopicId(UUID_TEST)).thenReturn(Optional.ofNullable(this.topicEntity));
+
+        TopicEntity actual = this.topicService.getTopic(UUID_TEST + " ");
+
+        verify(this.topicEntityRepository, times(1)).findByTopicId(UUID_TEST);
+
+        assertNotNull(actual);
+        assertEquals(UUID_TEST, actual.getTopicId());
+        assertEquals("Votacao", actual.getTitle());
+        assertEquals("Motivo", actual.getDescription());
+        assertEquals(2, actual.getVotingSessionDuration());
+        assertEquals(this.topicEntity, actual);
+    }
+
+    @Test
+    void shouldThrowTopicIdNotFoundExceptionWhenTopicIdIsInvalid() {
+        when(this.topicEntityRepository.findByTopicId(UUID_TEST)).thenReturn(Optional.empty());
+
+        TopicIdNotFoundException actual = assertThrows(TopicIdNotFoundException.class, () -> this.topicService.getTopic(UUID_TEST));
+
+        verify(this.topicEntityRepository, times(1)).findByTopicId(UUID_TEST);
+
+        assertNotNull(actual);
+        assertEquals(TopicIdNotFoundException.ERROR.getMessage(UUID_TEST), actual.getMessage());
+    }
+
+    @Test
+    void shouldThrowInvalidTopicIdExceptionWhenTopicIdIsInvalid() {
+        String invalidTopicId = "invalidTopicId";
+
+        InvalidTopicIdException actual = assertThrows(InvalidTopicIdException.class, () -> this.topicService.getTopic(invalidTopicId));
+
+        verify(this.topicEntityRepository, never()).findByTopicId(invalidTopicId);
+
+        assertNotNull(actual);
+        assertEquals(InvalidTopicIdException.ERROR.getMessage(invalidTopicId), actual.getMessage());
     }
 
 }
