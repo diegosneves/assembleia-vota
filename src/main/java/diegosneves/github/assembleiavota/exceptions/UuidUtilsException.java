@@ -1,6 +1,6 @@
 package diegosneves.github.assembleiavota.exceptions;
 
-import diegosneves.github.assembleiavota.enums.ExceptionHandler;
+import diegosneves.github.assembleiavota.enums.ExceptionDetails;
 
 
 /**
@@ -8,18 +8,18 @@ import diegosneves.github.assembleiavota.enums.ExceptionHandler;
  * Ela estende a classe {@link RuntimeException}, permitindo a semântica de "exceptions não verificadas" do Java,
  * ou seja, não é necessário o uso de try/catch ou throws para lidar com este tipo de exceção.
  * <p>
- * {@link UuidUtilsException} incorpora uma mensagem de erro de um {@link ExceptionHandler manipulador de exceções}, `ERROR`, que é usado para formatar a mensagem da exceção.
+ * {@link UuidUtilsException} incorpora uma mensagem de erro de um {@link ExceptionDetails manipulador de exceções}, `ERROR`, que é usado para formatar a mensagem da exceção.
  *
  * @author diegoneves
  */
 public class UuidUtilsException extends RuntimeException {
 
-    public static final ExceptionHandler ERROR = ExceptionHandler.INVALID_UUID_FORMAT_MESSAGE;
+    public static final ExceptionDetails ERROR = ExceptionDetails.INVALID_UUID_FORMAT_MESSAGE;
 
     /**
      * Construtor da classe {@link UuidUtilsException}
      *
-     * @param message A mensagem detalhada da exceção. Esta mensagem é formatada pelo {@link ExceptionHandler manipulador de exceções} `ERROR`
+     * @param message A mensagem detalhada da exceção. Esta mensagem é formatada pelo {@link ExceptionDetails manipulador de exceções} `ERROR`
      */
     public UuidUtilsException(String message) {
         super(ERROR.getMessage(message));

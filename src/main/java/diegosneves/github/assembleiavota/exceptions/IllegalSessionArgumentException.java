@@ -1,6 +1,6 @@
 package diegosneves.github.assembleiavota.exceptions;
 
-import diegosneves.github.assembleiavota.enums.ExceptionHandler;
+import diegosneves.github.assembleiavota.enums.ExceptionDetails;
 
 /**
  * Classe IllegalSessionArgumentException.
@@ -16,7 +16,7 @@ import diegosneves.github.assembleiavota.enums.ExceptionHandler;
  */
 public class IllegalSessionArgumentException extends RuntimeException {
 
-    public static final ExceptionHandler ERROR = ExceptionHandler.SESSION_ERROR_MESSAGE;
+    public static final ExceptionDetails ERROR = ExceptionDetails.SESSION_ERROR_MESSAGE;
 
     public IllegalSessionArgumentException(String message) {
         super(ERROR.getMessage(message));

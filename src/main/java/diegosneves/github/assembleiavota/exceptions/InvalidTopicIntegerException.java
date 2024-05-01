@@ -1,6 +1,6 @@
 package diegosneves.github.assembleiavota.exceptions;
 
-import diegosneves.github.assembleiavota.enums.ExceptionHandler;
+import diegosneves.github.assembleiavota.enums.ExceptionDetails;
 
 /**
  * Classe {@link InvalidTopicIntegerException} é uma classe para lidar com exceções específicas
@@ -13,7 +13,7 @@ import diegosneves.github.assembleiavota.enums.ExceptionHandler;
  */
 public class InvalidTopicIntegerException extends RuntimeException {
 
-    public static final ExceptionHandler ERROR = ExceptionHandler.TOPIC_NON_NULL_INTEGER_ATTRIBUTE;
+    public static final ExceptionDetails ERROR = ExceptionDetails.TOPIC_NON_NULL_INTEGER_ATTRIBUTE;
 
     /**
      * Construtor que cria uma nova exceção com uma mensagem de erro padrão.

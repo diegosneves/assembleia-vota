@@ -11,6 +11,9 @@ import diegosneves.github.assembleiavota.exceptions.SessionCreateFailureExceptio
 import diegosneves.github.assembleiavota.exceptions.SessionNotFound;
 import diegosneves.github.assembleiavota.exceptions.TopicIdNotFoundException;
 import diegosneves.github.assembleiavota.exceptions.UuidUtilsException;
+import diegosneves.github.assembleiavota.exceptions.ValidationUserCpfException;
+import diegosneves.github.assembleiavota.exceptions.VoteDuplicateException;
+import diegosneves.github.assembleiavota.exceptions.VoteRequestValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -173,6 +176,44 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ExceptionDTO> sessionRelatedFaileures(IllegalSessionArgumentException exception) {
         ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), IllegalSessionArgumentException.ERROR.getStatusCodeValue());
         return ResponseEntity.status(IllegalSessionArgumentException.ERROR.getHttpStatusCode()).body(dto);
+    }
+
+    /**
+     * Manipulador de exceções para situações em que ocorre uma falha relacionada à validação do CPF do usuário.
+     *
+     * @param exception a exceção específica que ocorreu durante a validação do CPF do usuário.
+     * @return ResponseEntity<ExceptionDTO> - uma resposta do servidor contendo um DTO de exceção,
+     * que inclui a mensagem da exceção e o valor do status do código HTTP.
+     */
+    @ExceptionHandler(ValidationUserCpfException.class)
+    public ResponseEntity<ExceptionDTO> fiscalRelatedFaileures(ValidationUserCpfException exception) {
+        ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), ValidationUserCpfException.ERROR.getStatusCodeValue());
+        return ResponseEntity.status(ValidationUserCpfException.ERROR.getHttpStatusCode()).body(dto);
+    }
+
+    /**
+     * Lida com exceções de voto duplicado geradas ao tentar votar mais de uma vez em um determinado contexto.
+     *
+     * @param exception A exceção do tipo VoteDuplicatedException lançada ao registrar um voto duplicado.
+     * @return Uma instância da classe ResponseEntity que contém o objeto ExceptionDTO com a mensagem da exceção e o código de status HTTP adequado que representa o erro do voto duplicado.
+     */
+    @ExceptionHandler(VoteDuplicateException.class)
+    public ResponseEntity<ExceptionDTO> voteRelatedFaileures(VoteDuplicateException exception) {
+        ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), VoteDuplicateException.ERROR.getStatusCodeValue());
+        return ResponseEntity.status(VoteDuplicateException.ERROR.getHttpStatusCode()).body(dto);
+    }
+
+    /**
+     * Método de manipulação de exceção para erros relacionados a requisições de votos.
+     * Essa exceção é lançada quando a validação de uma requisição de voto falha.
+     *
+     * @param exception A exceção específica de falha na requisição de voto.
+     * @return ResponseEntity contendo o DTO da exceção e o status HTTP correspondente ao erro.
+     */
+    @ExceptionHandler(VoteRequestValidationException.class)
+    public ResponseEntity<ExceptionDTO> voteRelatedFaileures(VoteRequestValidationException exception) {
+        ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), VoteRequestValidationException.ERROR.getStatusCodeValue());
+        return ResponseEntity.status(VoteRequestValidationException.ERROR.getHttpStatusCode()).body(dto);
     }
 
 }

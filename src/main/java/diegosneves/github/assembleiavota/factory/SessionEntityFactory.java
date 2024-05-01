@@ -5,13 +5,14 @@ import diegosneves.github.assembleiavota.models.TopicEntity;
 import diegosneves.github.assembleiavota.utils.UuidUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class SessionEntityFactory {
 
     private SessionEntityFactory() {}
 
     public static SessionEntity create(TopicEntity topicEntity, LocalDateTime startTime) {
-        return new SessionEntity(UuidUtils.generateUuid(), topicEntity, true, startTime, startTime.plusMinutes(topicEntity.getVotingSessionDuration()));
+        return new SessionEntity(UuidUtils.generateUuid(), topicEntity, true, startTime, startTime.plusMinutes(topicEntity.getVotingSessionDuration()), new ArrayList<>());
     }
 
 }

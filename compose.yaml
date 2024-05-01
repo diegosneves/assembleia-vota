@@ -10,6 +10,12 @@ services:
     volumes:
       - db-mysql-assembleia:/var/lib/mysql
 
+  validator-fiscal-app:
+    image: diegoneves/validator-fiscal:latest
+    container_name: validator_fiscal_api
+    ports:
+      - "8001:8001"
+
   assembleia-app:
     image: diegoneves/assembleia-vota:latest
     container_name: assembleia_vota_api
@@ -20,6 +26,8 @@ services:
     environment:
       - DB_HOST=assembleia_mysql_db
       - DB_PORT=3306
+      - FISCAL_HOST=validator_fiscal_api
+      - FISCAL_PORT=8001
     entrypoint: sh -c "dockerize -wait tcp://assembleia_mysql_db:3306 -timeout 60s && java -jar target/assembleia-vota.jar"
 
 volumes:

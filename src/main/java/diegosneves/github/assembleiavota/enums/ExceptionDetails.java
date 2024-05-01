@@ -3,20 +3,22 @@ package diegosneves.github.assembleiavota.enums;
 import org.springframework.http.HttpStatus;
 
 /**
- * A classe {@link ExceptionHandler} é uma enumeração que define várias mensagens de exceções.
+ * A classe {@link ExceptionDetails} é uma enumeração que define várias mensagens de exceções.
  * Cada mensagem corresponde a uma condição específica de validação ou erro
  * que pode ocorrer durante as operações.
  *
  * @author diegoneves
  */
-public enum ExceptionHandler {
+public enum ExceptionDetails {
 
     CONSTRUCTOR_DEFAULT_UNDEFINED("Classe [ %s ] deve declarar um construtor padrão.", HttpStatus.NOT_IMPLEMENTED),
     CLASS_MAPPING_FAILURE("Falha ao tentar mapear a classe [ %s ].", HttpStatus.INTERNAL_SERVER_ERROR),
-    TOPIC_ATTRIBUTE_INVALID("O campo %s não pode ser nulo ou vazio", HttpStatus.BAD_REQUEST),
+    INVALID_FIELD("O campo %s não pode ser nulo ou vazio", HttpStatus.BAD_REQUEST),
     TOPIC_NON_NULL_INTEGER_ATTRIBUTE("A %s não pode ser nula", HttpStatus.BAD_REQUEST),
     TOPIC_ID_NOT_FOUND("O ID %s do tópico não foi encontrado", HttpStatus.NOT_FOUND),
     SESSION_ID_NOT_FOUND("O ID %s da Sessão não foi encontrado", HttpStatus.NOT_FOUND),
+    CPF_VALIDATION_FAILED("A falha na validação do CPF ocorreu devido ao seguinte motivo: %s", HttpStatus.NOT_FOUND),
+    CPF_DUPLICATE_VALIDATION_FAILED("Um voto já foi registrado para este CPF %s nesta pauta", HttpStatus.BAD_REQUEST),
     SESSION_ERROR_MESSAGE("Ocorreu um erro na Session devido ao seguinte motivo: %s", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_ID_FORMAT("O ID %s precisa estar no formato UUID (Identificador Único Universal)", HttpStatus.BAD_REQUEST),
     FAILURE_CREATE_SESSION("O sistema falhou ao tentar estabelecer uma nova sessão de votação devido ao seguinte motivo: %s", HttpStatus.BAD_REQUEST),
@@ -25,7 +27,7 @@ public enum ExceptionHandler {
     private final String message;
     private final HttpStatus httpStatus;
 
-    ExceptionHandler(String message, HttpStatus httpStatus) {
+    ExceptionDetails(String message, HttpStatus httpStatus) {
         this.message = message;
         this.httpStatus = httpStatus;
     }

@@ -1,6 +1,6 @@
 package diegosneves.github.assembleiavota.services;
 
-import diegosneves.github.assembleiavota.enums.ExceptionHandler;
+import diegosneves.github.assembleiavota.enums.ExceptionDetails;
 import diegosneves.github.assembleiavota.exceptions.InvalidIdException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicIntegerException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
@@ -123,7 +123,7 @@ class TopicServiceTest {
         verify(this.topicEntityRepository, never()).save(any(TopicEntity.class));
 
         assertNotNull(actual);
-        assertEquals(ExceptionHandler.TOPIC_ATTRIBUTE_INVALID.getMessage(TopicService.TOPIC_TITLE), actual.getMessage());
+        assertEquals(ExceptionDetails.INVALID_FIELD.getMessage(TopicService.TOPIC_TITLE), actual.getMessage());
     }
 
     @Test
@@ -140,7 +140,7 @@ class TopicServiceTest {
         verify(this.topicEntityRepository, never()).save(any(TopicEntity.class));
 
         assertNotNull(actual);
-        assertEquals(ExceptionHandler.TOPIC_ATTRIBUTE_INVALID.getMessage(TopicService.TOPIC_TITLE), actual.getMessage());
+        assertEquals(ExceptionDetails.INVALID_FIELD.getMessage(TopicService.TOPIC_TITLE), actual.getMessage());
     }
 
     @Test
@@ -157,7 +157,7 @@ class TopicServiceTest {
         verify(this.topicEntityRepository, never()).save(any(TopicEntity.class));
 
         assertNotNull(actual);
-        assertEquals(ExceptionHandler.TOPIC_ATTRIBUTE_INVALID.getMessage(TopicService.TOPIC_TITLE), actual.getMessage());
+        assertEquals(ExceptionDetails.INVALID_FIELD.getMessage(TopicService.TOPIC_TITLE), actual.getMessage());
     }
 
     @Test
@@ -174,7 +174,7 @@ class TopicServiceTest {
         verify(this.topicEntityRepository, never()).save(any(TopicEntity.class));
 
         assertNotNull(actual);
-        assertEquals(ExceptionHandler.TOPIC_NON_NULL_INTEGER_ATTRIBUTE.getMessage(TopicService.VOTING_DURATION), actual.getMessage());
+        assertEquals(ExceptionDetails.TOPIC_NON_NULL_INTEGER_ATTRIBUTE.getMessage(TopicService.VOTING_DURATION), actual.getMessage());
     }
 
     @Test

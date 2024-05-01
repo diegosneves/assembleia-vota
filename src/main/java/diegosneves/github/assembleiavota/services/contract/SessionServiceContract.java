@@ -38,24 +38,19 @@ public interface SessionServiceContract {
      */
     SessionEntity getSession(String sessionId) throws SessionNotFound, InvalidIdException;
 
-    /**
-     * Verifica se uma sessão está aberta.
-     * O método faz isso ao comparar se a hora atual é anterior ao horário de término da sessão.
-     * Após isso, o estado da sessão é atualizado com o resultado da verificação e a
-     * sessão modificada é salva no repositório.
-     *
-     * @param session A sessão a ser verificada. Não pode ser {@code null}.
-     * @return {@code true} se a sessão estiver aberta; {@code false} caso contrário.
-     * @throws IllegalSessionArgumentException Se a sessão passada como argumento for inválida.
-     */
-    boolean sessionIsOpen(SessionEntity session) throws IllegalSessionArgumentException;
 
     /**
      * Atualiza uma sessão existente na base de dados.
+     * <p>
+     * Este método primeiro valida a sessão fornecida utilizando o método `sessionValidate()`.
+     * Em seguida, verifica se a data/hora atual é anterior à data/hora de término da sessão.
+     * Se for, a sessão é considerada aberta e o estado da sessão é ajustado de acordo.
+     * Depois, a sessão atualizada é salva no repositório e a entidade atualizada é retornada.
      *
-     * @param session A sessão a ser atualizada.
-     * @throws IllegalSessionArgumentException se a sessão for inválida.
+     * @param session A entidade da sessão que deve ser atualizada.
+     * @return A entidade da sessão atualizada.
+     * @throws IllegalSessionArgumentException se a sessão fornecida é inválida.
      */
-    void updateSession(SessionEntity session) throws IllegalSessionArgumentException;
+    SessionEntity updateSession(SessionEntity session) throws IllegalSessionArgumentException;
 
 }
