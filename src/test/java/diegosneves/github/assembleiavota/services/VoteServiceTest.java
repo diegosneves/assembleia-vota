@@ -92,7 +92,7 @@ class VoteServiceTest {
                 .status(UserStatus.ABLE_TO_VOTE)
                 .sessionId(UUID_SESSION_TEST)
                 .totalVoters(this.sessionEntity.getVotes().size())
-                .topicVoted(new TopicVotedDTO(this.topicEntity.getTitle(), this.topicEntity.getDescription(), this.topicEntity.getVotingSessionDuration()))
+                .topicVoted(new TopicVotedDTO(TOPIC_UNIQUE_ID, this.topicEntity.getTitle(), this.topicEntity.getDescription(), this.topicEntity.getVotingSessionDuration()))
                 .chosenVoteOption(VoteOption.YES)
                 .voteTaken(true)
                 .build();

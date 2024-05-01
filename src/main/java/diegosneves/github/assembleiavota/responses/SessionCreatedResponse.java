@@ -1,6 +1,6 @@
 package diegosneves.github.assembleiavota.responses;
 
-import diegosneves.github.assembleiavota.dto.TopicEntityDTO;
+import diegosneves.github.assembleiavota.dto.TopicVotedDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class SessionCreatedResponse {
 
     private String sessionId;
-    private TopicEntityDTO topicEntityDTO;
+    private TopicVotedDTO topicVotedDTO;
     private boolean isOpen;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
