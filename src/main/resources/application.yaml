@@ -11,6 +11,10 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  api:
+    url:
+      validator-fiscal: http://${FISCAL_HOST}:${FISCAL_PORT}/v1/usuario/associado/
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
