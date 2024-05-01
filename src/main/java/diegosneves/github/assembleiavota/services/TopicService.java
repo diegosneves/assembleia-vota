@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static diegosneves.github.assembleiavota.enums.ExceptionHandler.TOPIC_ID_NOT_FOUND;
+import static diegosneves.github.assembleiavota.enums.ExceptionDetails.TOPIC_ID_NOT_FOUND;
 import static java.util.Objects.isNull;
 
 @Service

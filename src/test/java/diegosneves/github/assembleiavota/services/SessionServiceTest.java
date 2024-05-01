@@ -35,16 +35,16 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 class SessionServiceTest {
 
-    private static final String TOPIC_UNIQUE_ID = "4658a51c-3840-453e-bc69-e2b4cff191a4";
-    private static final String UUID_SESSION_TEST = "1041148d-3cee-4d97-bafe-5aee1697eb78";
-    private static final String VOTACAO_TITLE = "Votacao";
-    private static final String DESCRIPTION = "Motivo";
-    private static final int VOTING_DURATION = 5;
-    private static final int YEAR = 2024;
-    private static final int MONTH = 4;
-    private static final int DAY = 28;
-    private static final int HOUR = 12;
-    private static final int MINUTE = 40;
+    public static final String TOPIC_UNIQUE_ID = "4658a51c-3840-453e-bc69-e2b4cff191a4";
+    public static final String UUID_SESSION_TEST = "1041148d-3cee-4d97-bafe-5aee1697eb78";
+    public static final String VOTACAO_TITLE = "Votacao";
+    public static final String DESCRIPTION = "Motivo";
+    public static final int VOTING_DURATION = 5;
+    public static final int YEAR = 2024;
+    public static final int MONTH = 4;
+    public static final int DAY = 28;
+    public static final int HOUR = 12;
+    public static final int MINUTE = 40;
 
     @InjectMocks
     private SessionService service;
@@ -162,6 +162,7 @@ class SessionServiceTest {
                 .endTime(this.startDateTime.plusMinutes(VOTING_DURATION))
                 .build();
         when(this.repository.findBySessionId(UUID_SESSION_TEST)).thenReturn(Optional.ofNullable(sessionEntity));
+        when(this.repository.save(any(SessionEntity.class))).thenReturn(sessionEntity);
 
         SessionEntity actual = this.service.getSession(UUID_SESSION_TEST);
 
@@ -206,66 +207,10 @@ class SessionServiceTest {
         assertEquals(InvalidIdException.ERROR.getMessage(sessionId), actual.getMessage());
     }
 
-    @Test
-    void shouldValidateIfSessionIsOpen() {
-        this.startDateTime = LocalDateTime.now();
-        SessionEntity sessionEntity = SessionEntity.builder()
-                .sessionId(UUID_SESSION_TEST)
-                .topic(this.topic)
-                .isOpen(true)
-                .startTime(this.startDateTime)
-                .endTime(this.startDateTime.plusMinutes(VOTING_DURATION))
-                .build();
-
-        boolean actual = this.service.sessionIsOpen(sessionEntity);
-
-        verify(this.repository, times(1)).save(this.sessionCaptor.capture());
-
-        assertTrue(actual);
-        assertTrue(this.sessionCaptor.getValue().isOpen());
-    }
-
-    @Test
-    void shouldCheckIfSessionIsOpenAndSaveTheState() {
-        this.startDateTime = LocalDateTime.now();
-        SessionEntity sessionEntity = SessionEntity.builder()
-                .sessionId(UUID_SESSION_TEST)
-                .topic(this.topic)
-                .isOpen(true)
-                .startTime(this.startDateTime)
-                .endTime(this.startDateTime)
-                .build();
-
-        boolean actual = this.service.sessionIsOpen(sessionEntity);
-
-        verify(this.repository, times(1)).save(this.sessionCaptor.capture());
-
-        assertFalse(actual);
-        assertFalse(this.sessionCaptor.getValue().isOpen());
-    }
-
-    @Test
-    void shouldValidateSessionIsConsideredClosedWhenEndTimeIsBeforeCurrentTimeDespiteIsOpenFlag() {
-        this.startDateTime = LocalDateTime.now();
-        SessionEntity sessionEntity = SessionEntity.builder()
-                .sessionId(UUID_SESSION_TEST)
-                .topic(this.topic)
-                .isOpen(true)
-                .startTime(this.startDateTime.plusMinutes(VOTING_DURATION))
-                .endTime(this.startDateTime)
-                .build();
-
-        boolean actual = this.service.sessionIsOpen(sessionEntity);
-
-        verify(this.repository, times(1)).save(this.sessionCaptor.capture());
-
-        assertFalse(actual);
-        assertFalse(this.sessionCaptor.getValue().isOpen());
-    }
 
     @Test
     void shouldThrowIllegalSessionArgumentExceptionWhenSessionIsNull() {
-        IllegalSessionArgumentException actual = assertThrows(IllegalSessionArgumentException.class, () -> this.service.sessionIsOpen(null));
+        IllegalSessionArgumentException actual = assertThrows(IllegalSessionArgumentException.class, () -> this.service.updateSession(null));
 
         verify(this.repository, never()).save(any(SessionEntity.class));
 
@@ -284,7 +229,7 @@ class SessionServiceTest {
     }
 
     @Test
-    void should() {
+    void shouldUpdateSessionSuccessfully() {
         SessionEntity sessionEntity = SessionEntity.builder()
                 .sessionId(UUID_SESSION_TEST)
                 .topic(this.topic)
@@ -293,8 +238,14 @@ class SessionServiceTest {
                 .endTime(this.startDateTime.plusMinutes(VOTING_DURATION))
                 .build();
 
-        this.service.updateSession(sessionEntity);
+        when(this.repository.save(sessionEntity)).thenReturn(sessionEntity);
+
+        SessionEntity entity = this.service.updateSession(sessionEntity);
+
         verify(this.repository, times(1)).save(sessionEntity);
+
+        assertNotNull(entity);
+        assertEquals(sessionEntity, entity);
     }
 
 }

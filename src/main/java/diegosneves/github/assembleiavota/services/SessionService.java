@@ -68,7 +68,8 @@ public class SessionService implements SessionServiceContract {
     public SessionEntity getSession(String sessionId) throws SessionNotFound, InvalidIdException {
         Optional<SessionEntity> optionalSession = this.repository.findBySessionId(validateSessionId(sessionId));
         if (optionalSession.isPresent()) {
-            return optionalSession.get();
+            SessionEntity currentSession = optionalSession.get();
+            return this.updateSession(currentSession);
         }
         log.error(SessionNotFound.ERROR.getMessage(sessionId));
         throw new SessionNotFound(sessionId);
@@ -95,15 +96,6 @@ public class SessionService implements SessionServiceContract {
         }
     }
 
-    @Override
-    public boolean sessionIsOpen(SessionEntity session) throws IllegalSessionArgumentException {
-        sessionValidate(session);
-        boolean isOpen = LocalDateTime.now().isBefore(session.getEndTime());
-        session.setOpen(isOpen);
-        this.repository.save(session);
-        return isOpen;
-    }
-
     /**
      * Valida se a entidade da sessão fornecida é não-nula.
      *
@@ -117,8 +109,10 @@ public class SessionService implements SessionServiceContract {
     }
 
     @Override
-    public void updateSession(SessionEntity session) throws IllegalSessionArgumentException {
+    public SessionEntity updateSession(SessionEntity session) throws IllegalSessionArgumentException {
         sessionValidate(session);
-        this.repository.save(session);
+        boolean isOpen = LocalDateTime.now().isBefore(session.getEndTime());
+        session.setOpen(isOpen);
+        return this.repository.save(session);
     }
 }
