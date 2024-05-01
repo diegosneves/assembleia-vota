@@ -1,6 +1,6 @@
 package diegosneves.github.assembleiavota.exceptions;
 
-import diegosneves.github.assembleiavota.enums.ExceptionHandler;
+import diegosneves.github.assembleiavota.enums.ExceptionDetails;
 
 /**
  * Exceção personalizada que é lançada quando não é definido um construtor padrão.
@@ -9,7 +9,7 @@ import diegosneves.github.assembleiavota.enums.ExceptionHandler;
  */
 public class ConstructorDefaultUndefinedException extends RuntimeException {
 
-    public static final ExceptionHandler ERROR = ExceptionHandler.CONSTRUCTOR_DEFAULT_UNDEFINED;
+    public static final ExceptionDetails ERROR = ExceptionDetails.CONSTRUCTOR_DEFAULT_UNDEFINED;
 
     /**
      * Construtor da exceção {@link ConstructorDefaultUndefinedException}.

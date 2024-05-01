@@ -1,6 +1,6 @@
 package diegosneves.github.assembleiavota.exceptions;
 
-import diegosneves.github.assembleiavota.enums.ExceptionHandler;
+import diegosneves.github.assembleiavota.enums.ExceptionDetails;
 
 /**
  * Esta classe representa uma exceção personalizada que é lançada quando ocorre um erro ao criar uma sessão.
@@ -10,7 +10,7 @@ import diegosneves.github.assembleiavota.enums.ExceptionHandler;
  */
 public class SessionCreateFailureException extends RuntimeException {
 
-    public static final ExceptionHandler ERROR = ExceptionHandler.FAILURE_CREATE_SESSION;
+    public static final ExceptionDetails ERROR = ExceptionDetails.FAILURE_CREATE_SESSION;
 
     public SessionCreateFailureException(String message, Throwable e) {
         super(ERROR.getMessage(message), e);
