@@ -5,6 +5,7 @@ import diegosneves.github.assembleiavota.enums.ExceptionDetails;
 /**
  * Exceção personalizada que é lançada quando não é definido um construtor padrão.
  *
+ * @see RuntimeException
  * @author diegoneves
  */
 public class ConstructorDefaultUndefinedException extends RuntimeException {

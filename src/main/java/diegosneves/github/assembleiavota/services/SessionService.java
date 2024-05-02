@@ -26,6 +26,17 @@ import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
+/**
+ * A classe {@link SessionService} fornece métodos para gerenciamento de sessões no sistema.
+ * <p>
+ * Este serviço implementa a interface {@link SessionServiceContract}, definindo assim a lógica e as operações relacionadas ao gerenciamento de sessões.
+ * <p>
+ * As responsabilidades desta classe incluem a criação de uma nova sessão, a recuperação de uma entidade de sessão através do ID da sessão e a atualização de uma sessão existente.
+ * <p>
+ * O serviço SessionService tem como dependências a {@link SessionEntityRepository}, para a persistência de dados relacionados às sessões, e a interface {@link TopicServiceContract}, que define as operações e a lógica relacionada ao gerenciamento de tópicos. Estas dependências são injetadas através do construtor deste serviço.
+ *
+ * @author diegoneves
+ */
 @Service
 @Slf4j
 public class SessionService implements SessionServiceContract {
@@ -47,7 +58,22 @@ public class SessionService implements SessionServiceContract {
 
     @Override
     public SessionCreatedResponse startSession(StartSessionRequest request) throws SessionCreateFailureException {
-        TopicEntity topic = null;
+        TopicEntity topic = obtainTopicEntityFromRequest(request);
+        SessionEntity session = SessionEntityFactory.create(topic, LocalDateTime.now());
+        this.repository.save(session);
+        MapperStrategy<SessionCreatedResponse, SessionEntity> mapper = new SessionCreatedResponseMapper();
+        return mapper.mapFrom(session);
+    }
+
+    /**
+     * Obtém a entidade do tópico do {@link StartSessionRequest} fornecido.
+     *
+     * @param request a solicitação de início de sessão
+     * @return a entidade do tópico obtida na solicitação
+     * @throws SessionCreateFailureException se houver falha na criação da sessão
+     */
+    private TopicEntity obtainTopicEntityFromRequest(StartSessionRequest request) throws SessionCreateFailureException {
+        TopicEntity topic;
         try {
             topic = this.topicService.getTopic(request.getTopicId());
         } catch (InvalidIdException e) {
@@ -58,10 +84,7 @@ public class SessionService implements SessionServiceContract {
             log.error(SessionCreateFailureException.ERROR.getMessage(TOPIC_DOES_NOT_EXIST), e);
             throw new SessionCreateFailureException(TOPIC_DOES_NOT_EXIST, e);
         }
-        SessionEntity session = SessionEntityFactory.create(topic, LocalDateTime.now());
-        this.repository.save(session);
-        MapperStrategy<SessionCreatedResponse, SessionEntity> mapper = new SessionCreatedResponseMapper();
-        return mapper.mapFrom(session);
+        return topic;
     }
 
     @Override

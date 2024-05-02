@@ -10,6 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * A classe {@link VoteController} representa o controlador para ações de votação.
+ *
+ * @author diegoneves
+ */
 @RestController
 @RequestMapping("/v1/vote")
 public class VoteController implements VoteControllerContract {

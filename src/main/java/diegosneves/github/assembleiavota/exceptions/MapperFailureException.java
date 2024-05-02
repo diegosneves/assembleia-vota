@@ -8,6 +8,7 @@ import diegosneves.github.assembleiavota.enums.ExceptionDetails;
  * Herdando de {@link RuntimeException}, ela representa exceções em tempo de execução que podem ser lançadas
  * durante a operação normal da JVM.
  *
+ * @see RuntimeException
  * @author diegoneves
  */
 public class MapperFailureException extends RuntimeException {

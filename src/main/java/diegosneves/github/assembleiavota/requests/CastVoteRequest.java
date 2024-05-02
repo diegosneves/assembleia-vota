@@ -6,6 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * A classe {@link CastVoteRequest} representa uma solicitação para votar.
+ * Contém as informações necessárias para votar, incluindo o CPF do usuário,
+ * o ID da sessão na qual o voto deverá ser realizado e a opção de voto escolhida.
+ *
+ * @see VoteOption
+ * @autor diegoneves
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

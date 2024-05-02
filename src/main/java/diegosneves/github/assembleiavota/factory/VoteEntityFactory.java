@@ -7,6 +7,12 @@ import diegosneves.github.assembleiavota.utils.UuidUtils;
 
 import java.time.LocalDateTime;
 
+/**
+ * A classe {@link VoteEntityFactory} é uma classe de fábrica para criar instâncias da classe {@link VoteEntity}.
+ * Fornece um método estático que pega os parâmetros necessários para criar um objeto {@link VoteEntity} e o retorna.
+ *
+ * @autor diegoneves
+ */
 public class VoteEntityFactory {
 
     private VoteEntityFactory() {}
