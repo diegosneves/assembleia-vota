@@ -1,7 +1,10 @@
 package diegosneves.github.assembleiavota.services;
 
-import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
+import diegosneves.github.assembleiavota.exceptions.InvalidIdException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicIntegerException;
+import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
+import diegosneves.github.assembleiavota.exceptions.TopicIdNotFoundException;
+import diegosneves.github.assembleiavota.exceptions.UuidUtilsException;
 import diegosneves.github.assembleiavota.factory.TopicEntityFactory;
 import diegosneves.github.assembleiavota.mapper.BuilderMapper;
 import diegosneves.github.assembleiavota.models.TopicEntity;
@@ -9,18 +12,30 @@ import diegosneves.github.assembleiavota.repositories.TopicEntityRepository;
 import diegosneves.github.assembleiavota.requests.TopicRequest;
 import diegosneves.github.assembleiavota.responses.TopicCreatedResponse;
 import diegosneves.github.assembleiavota.services.contract.TopicServiceContract;
+import diegosneves.github.assembleiavota.utils.UuidUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+import static diegosneves.github.assembleiavota.enums.ExceptionDetails.TOPIC_ID_NOT_FOUND;
+import static java.util.Objects.isNull;
+
+/**
+ * Esta classe representa um serviço de gerenciamento de tópicos. Ele fornece métodos para criar e recuperar tópicos.
+ *
+ * @author diegoneves
+ */
 @Service
 @Slf4j
 public class TopicService implements TopicServiceContract {
 
-    private static final String TOPIC_TITLE = "Titulo";
-    private static final String TOPIC_DESCRIPTION = "Descrição";
-    private static final String VOTING_DURATION = "Duração";
-    private static final int DEFAULT_VALUE = 1;
+    public static final String TOPIC_TITLE = "Titulo";
+    public static final String TOPIC_DESCRIPTION = "Descrição";
+    public static final String VOTING_DURATION = "Duração";
+    public static final int DEFAULT_VALUE = 1;
+    public static final String TOPIC_ID_NULL_ERROR = "da Pauta não pode ser nulo e";
 
     private final TopicEntityRepository topicEntityRepository;
 
@@ -36,6 +51,38 @@ public class TopicService implements TopicServiceContract {
         this.topicEntityRepository.save(topicEntity);
 
         return BuilderMapper.mapTo(TopicCreatedResponse.class, topicEntity);
+    }
+
+    @Override
+    public TopicEntity getTopic(String topicId) throws InvalidIdException, TopicIdNotFoundException {
+        Optional<TopicEntity> topicEntityOptional = this.topicEntityRepository.findByTopicId(validateTopicId(topicId));
+        if (topicEntityOptional.isPresent()) {
+            return topicEntityOptional.get();
+        } else {
+            log.error(TOPIC_ID_NOT_FOUND.getMessage(topicId));
+            throw new TopicIdNotFoundException(topicId);
+        }
+    }
+
+    /**
+     * Valida o {@link java.util.UUID ID} do tópico, que deve estar no formato {@link java.util.UUID UUID}.
+     *
+     * @param topicId o {@link java.util.UUID ID} do tópico a ser validado
+     * @return o {@link java.util.UUID ID} do tópico após ser validado e devidamente formatado
+     * @throws InvalidIdException se o {@link java.util.UUID ID} do tópico não estiver no formato {@link java.util.UUID UUID}
+     */
+    private static String validateTopicId(String topicId) throws InvalidIdException {
+        if (isNull(topicId)) {
+            log.error(InvalidIdException.ERROR.getMessage(TOPIC_ID_NULL_ERROR));
+            throw new InvalidIdException(TOPIC_ID_NULL_ERROR);
+        }
+        try {
+            UuidUtils.isValidUUID(topicId.trim());
+            return topicId.trim();
+        } catch (UuidUtilsException e) {
+            log.error(e.getMessage(), e);
+            throw new InvalidIdException(topicId.trim(), e);
+        }
     }
 
     /**
@@ -62,10 +109,10 @@ public class TopicService implements TopicServiceContract {
      * @param value O valor a ser validado.
      * @return Retorna o valor se este for válido.
      * @throws InvalidTopicStringAttributeException Se o valor for nulo, vazio ou em branco,
-     *                                 lança uma exceção com uma mensagem de erro, indicando qual campo é inválido.
+     *                                              lança uma exceção com uma mensagem de erro, indicando qual campo é inválido.
      */
     private static String validateTopicField(String field, String value) throws InvalidTopicStringAttributeException {
-        if (value == null || value.trim().isEmpty() || value.trim().isBlank()) {
+        if (value == null || value.isEmpty() || value.isBlank()) {
             log.error(InvalidTopicStringAttributeException.ERROR.getMessage(field));
             throw new InvalidTopicStringAttributeException(field);
         }
