@@ -15,6 +15,7 @@ public enum ExceptionDetails {
     CLASS_MAPPING_FAILURE("Falha ao tentar mapear a classe [ %s ].", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_FIELD("O campo %s não pode ser nulo ou vazio", HttpStatus.BAD_REQUEST),
     TOPIC_NON_NULL_INTEGER_ATTRIBUTE("A %s não pode ser nula", HttpStatus.BAD_REQUEST),
+    TOPIC_WITH_NO_VOTES("Nenhum voto foi registrado para o tópico com ID: %s", HttpStatus.NOT_FOUND),
     TOPIC_ID_NOT_FOUND("O ID %s do tópico não foi encontrado", HttpStatus.NOT_FOUND),
     SESSION_ID_NOT_FOUND("O ID %s da Sessão não foi encontrado", HttpStatus.NOT_FOUND),
     CPF_VALIDATION_FAILED("A falha na validação do CPF ocorreu devido ao seguinte motivo: %s", HttpStatus.NOT_FOUND),
