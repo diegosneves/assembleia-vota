@@ -10,6 +10,7 @@ import diegosneves.github.assembleiavota.enums.ExceptionDetails;
  * <p>
  * {@link UuidUtilsException} incorpora uma mensagem de erro de um {@link ExceptionDetails manipulador de exceções}, `ERROR`, que é usado para formatar a mensagem da exceção.
  *
+ * @see RuntimeException
  * @author diegoneves
  */
 public class UuidUtilsException extends RuntimeException {

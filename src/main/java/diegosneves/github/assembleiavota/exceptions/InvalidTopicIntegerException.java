@@ -8,7 +8,7 @@ import diegosneves.github.assembleiavota.enums.ExceptionDetails;
  * Esta classe estende {@link RuntimeException}, o que significa que as exceções desses tipos
  * são unchecked/irrecuperáveis.
  * <p>
- *
+ * @see RuntimeException
  * @author diegoneves
  */
 public class InvalidTopicIntegerException extends RuntimeException {

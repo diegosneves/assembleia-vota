@@ -22,6 +22,11 @@ import java.util.Optional;
 import static diegosneves.github.assembleiavota.enums.ExceptionDetails.TOPIC_ID_NOT_FOUND;
 import static java.util.Objects.isNull;
 
+/**
+ * Esta classe representa um serviço de gerenciamento de tópicos. Ele fornece métodos para criar e recuperar tópicos.
+ *
+ * @author diegoneves
+ */
 @Service
 @Slf4j
 public class TopicService implements TopicServiceContract {
