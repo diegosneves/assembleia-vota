@@ -99,18 +99,19 @@ services:
     container_name: assembleia_vota_api
     ports:
       - "8080:8080"
+      - "5005:5005"
     depends_on:
       - database
     environment:
-      - DB_HOST=assembleia_mysql_db
+      - DB_HOST=database
       - DB_PORT=3306
-      - FISCAL_HOST=validator_fiscal_api
+      - FISCAL_HOST=validator-fiscal-app
       - FISCAL_PORT=8001
-    entrypoint: sh -c "dockerize -wait tcp://assembleia_mysql_db:3306 -timeout 60s && java -jar target/assembleia-vota.jar"
+    entrypoint: sh -c "dockerize -wait tcp://database:3306 -timeout 60s && java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar target/assembleia-vota.jar"
 
 volumes:
   db-mysql-assembleia:
-    
+
 ```
 
 2. **Configure as Variáveis de Ambiente:**
