@@ -4,6 +4,7 @@ import diegosneves.github.assembleiavota.adapter.SendUserAdapter;
 import diegosneves.github.assembleiavota.dto.TopicVotedDTO;
 import diegosneves.github.assembleiavota.enums.UserStatus;
 import diegosneves.github.assembleiavota.enums.VoteOption;
+import diegosneves.github.assembleiavota.exceptions.NoVotesFoundForTopicException;
 import diegosneves.github.assembleiavota.exceptions.VoteDuplicateException;
 import diegosneves.github.assembleiavota.exceptions.VoteRequestValidationException;
 import diegosneves.github.assembleiavota.models.SessionEntity;
@@ -12,8 +13,10 @@ import diegosneves.github.assembleiavota.models.VoteEntity;
 import diegosneves.github.assembleiavota.repositories.VoteEntityRepository;
 import diegosneves.github.assembleiavota.requests.CastVoteRequest;
 import diegosneves.github.assembleiavota.responses.CastVoteResponse;
+import diegosneves.github.assembleiavota.responses.CountVotesResponse;
 import diegosneves.github.assembleiavota.responses.UserResponse;
 import diegosneves.github.assembleiavota.services.contract.SessionServiceContract;
+import diegosneves.github.assembleiavota.services.contract.TopicServiceContract;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +29,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static diegosneves.github.assembleiavota.services.SessionServiceTest.DAY;
 import static diegosneves.github.assembleiavota.services.SessionServiceTest.DESCRIPTION;
@@ -61,6 +65,8 @@ class VoteServiceTest {
     @Mock
     private  SessionServiceContract sessionService;
     @Mock
+    private TopicServiceContract topicService;
+    @Mock
     private SendUserAdapter userAdapter;
 
     @Captor
@@ -86,13 +92,13 @@ class VoteServiceTest {
                 .startTime(this.time)
                 .endTime(this.time.plusMinutes(VOTING_DURATION))
                 .build();
-        this.voteEntity = new VoteEntity(VOTE_UUID, VOTER_CPF, this.sessionEntity, TOPIC_UNIQUE_ID,this.time, VoteOption.YES);
+        this.voteEntity = new VoteEntity(VOTE_UUID, VOTER_CPF, this.sessionEntity, TOPIC_UNIQUE_ID, this.time, VoteOption.YES);
         this.expectedResponse = CastVoteResponse.builder()
                 .voterCpf(VOTER_CPF)
                 .status(UserStatus.ABLE_TO_VOTE)
                 .sessionId(UUID_SESSION_TEST)
                 .totalVoters(this.sessionEntity.getVotes().size())
-                .topicVoted(new TopicVotedDTO(this.topicEntity.getTitle(), this.topicEntity.getDescription(), this.topicEntity.getVotingSessionDuration()))
+                .topicVoted(new TopicVotedDTO(TOPIC_UNIQUE_ID, this.topicEntity.getTitle(), this.topicEntity.getDescription(), this.topicEntity.getVotingSessionDuration()))
                 .chosenVoteOption(VoteOption.YES)
                 .voteTaken(true)
                 .build();
@@ -302,6 +308,59 @@ class VoteServiceTest {
 
         assertNotNull(exception);
         assertEquals(VoteRequestValidationException.ERROR.getMessage(VoteService.VOTE_CHOICE_FIELD), exception.getMessage());
+    }
+
+    @Test
+    void shouldReturnCorrectVoteCountWhenPerformingVotingSum() {
+        CountVotesResponse responseExpect = CountVotesResponse.builder()
+                .topicVoted(TopicVotedDTO.builder()
+                        .topicId(this.topicEntity.getTopicId())
+                        .title(this.topicEntity.getTitle())
+                        .description(this.topicEntity.getDescription())
+                        .votingSessionDuration(this.topicEntity.getVotingSessionDuration())
+                        .build())
+                .votesSum(1)
+                .totalVotesInFavor(1)
+                .totalVotesAgainst(0)
+                .build();
+        when(this.topicService.getTopic(TOPIC_UNIQUE_ID)).thenReturn(this.topicEntity);
+        when(this.repository.findByTopicId(TOPIC_UNIQUE_ID)).thenReturn(List.of(this.voteEntity));
+
+        CountVotesResponse actual = this.service.performVotingSum(TOPIC_UNIQUE_ID);
+
+        verify(this.sessionService, never()).getSession(UUID_SESSION_TEST);
+        verify(this.sessionService, never()).updateSession(any(SessionEntity.class));
+        verify(this.repository, never()).save(any(VoteEntity.class));
+        verify(this.userAdapter, never()).sendUser(anyString());
+        verify(this.topicService, times(1)).getTopic(TOPIC_UNIQUE_ID);
+        verify(this.repository, times(1)).findByTopicId(TOPIC_UNIQUE_ID);
+
+        assertNotNull(actual);
+        assertEquals(responseExpect.getTopicVoted().getTopicId(), actual.getTopicVoted().getTopicId());
+        assertEquals(responseExpect.getTopicVoted().getTitle(), actual.getTopicVoted().getTitle());
+        assertEquals(responseExpect.getTopicVoted().getDescription(), actual.getTopicVoted().getDescription());
+        assertEquals(responseExpect.getTopicVoted().getVotingSessionDuration(), actual.getTopicVoted().getVotingSessionDuration());
+        assertEquals(responseExpect.getVotesSum(), actual.getVotesSum());
+        assertEquals(responseExpect.getTotalVotesInFavor(), actual.getTotalVotesInFavor());
+        assertEquals(responseExpect.getTotalVotesAgainst(), actual.getTotalVotesAgainst());
+    }
+
+    @Test
+    void shouldThrowNoVotesFoundForTopicExceptionWhenNoVotesExistForTopic() {
+        when(this.topicService.getTopic(TOPIC_UNIQUE_ID)).thenReturn(this.topicEntity);
+        when(this.repository.findByTopicId(TOPIC_UNIQUE_ID)).thenReturn(new ArrayList<>());
+
+        NoVotesFoundForTopicException exception = assertThrows(NoVotesFoundForTopicException.class, () -> this.service.performVotingSum(TOPIC_UNIQUE_ID));
+
+        verify(this.sessionService, never()).getSession(UUID_SESSION_TEST);
+        verify(this.sessionService, never()).updateSession(any(SessionEntity.class));
+        verify(this.repository, never()).save(any(VoteEntity.class));
+        verify(this.userAdapter, never()).sendUser(anyString());
+        verify(this.topicService, times(1)).getTopic(TOPIC_UNIQUE_ID);
+        verify(this.repository, times(1)).findByTopicId(TOPIC_UNIQUE_ID);
+
+        assertNotNull(exception);
+        assertEquals(NoVotesFoundForTopicException.ERROR.getMessage(TOPIC_UNIQUE_ID), exception.getMessage());
     }
 
 }

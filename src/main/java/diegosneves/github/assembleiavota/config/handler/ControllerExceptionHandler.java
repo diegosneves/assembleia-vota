@@ -7,6 +7,7 @@ import diegosneves.github.assembleiavota.exceptions.InvalidIdException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicIntegerException;
 import diegosneves.github.assembleiavota.exceptions.InvalidTopicStringAttributeException;
 import diegosneves.github.assembleiavota.exceptions.MapperFailureException;
+import diegosneves.github.assembleiavota.exceptions.NoVotesFoundForTopicException;
 import diegosneves.github.assembleiavota.exceptions.SessionCreateFailureException;
 import diegosneves.github.assembleiavota.exceptions.SessionNotFound;
 import diegosneves.github.assembleiavota.exceptions.TopicIdNotFoundException;
@@ -214,6 +215,18 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ExceptionDTO> voteRelatedFaileures(VoteRequestValidationException exception) {
         ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), VoteRequestValidationException.ERROR.getStatusCodeValue());
         return ResponseEntity.status(VoteRequestValidationException.ERROR.getHttpStatusCode()).body(dto);
+    }
+
+    /**
+     * Método de tratamento de exceções que atua quando nenhuma votação é encontrada para um determinado tópico.
+     *
+     * @param exception Exceção de quando não há votos para um determinado tópico.
+     * @return ResponseEntity contendo as informações da exceção e o status HTTP correspondente
+     */
+    @ExceptionHandler(NoVotesFoundForTopicException.class)
+    public ResponseEntity<ExceptionDTO> voteRelatedFaileures(NoVotesFoundForTopicException exception) {
+        ExceptionDTO dto = new ExceptionDTO(exception.getMessage(), NoVotesFoundForTopicException.ERROR.getStatusCodeValue());
+        return ResponseEntity.status(NoVotesFoundForTopicException.ERROR.getHttpStatusCode()).body(dto);
     }
 
 }

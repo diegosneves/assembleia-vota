@@ -3,6 +3,7 @@ package diegosneves.github.assembleiavota.controllers;
 import diegosneves.github.assembleiavota.controllers.contracts.VoteControllerContract;
 import diegosneves.github.assembleiavota.requests.CastVoteRequest;
 import diegosneves.github.assembleiavota.responses.CastVoteResponse;
+import diegosneves.github.assembleiavota.responses.CountVotesResponse;
 import diegosneves.github.assembleiavota.services.contract.VoteServiceContract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,4 +28,9 @@ public class VoteController implements VoteControllerContract {
         return ResponseEntity.ok(response);
     }
 
+    @Override
+    public ResponseEntity<CountVotesResponse> countVotes(String topicId) {
+        CountVotesResponse response = this.voteService.performVotingSum(topicId);
+        return ResponseEntity.ok(response);
+    }
 }

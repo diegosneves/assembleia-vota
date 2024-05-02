@@ -1,6 +1,6 @@
 package diegosneves.github.assembleiavota.services;
 
-import diegosneves.github.assembleiavota.dto.TopicEntityDTO;
+import diegosneves.github.assembleiavota.dto.TopicVotedDTO;
 import diegosneves.github.assembleiavota.exceptions.IllegalSessionArgumentException;
 import diegosneves.github.assembleiavota.exceptions.InvalidIdException;
 import diegosneves.github.assembleiavota.exceptions.SessionCreateFailureException;
@@ -57,14 +57,14 @@ class SessionServiceTest {
     private ArgumentCaptor<SessionEntity> sessionCaptor;
 
     private TopicEntity topic;
-    private TopicEntityDTO topicDTO;
+    private TopicVotedDTO topicDTO;
     private LocalDateTime startDateTime;
 
 
     @BeforeEach
     void setUp() {
         this.topic = new TopicEntity(TOPIC_UNIQUE_ID, VOTACAO_TITLE, DESCRIPTION, VOTING_DURATION);
-        this.topicDTO = TopicEntityDTO.builder()
+        this.topicDTO = TopicVotedDTO.builder()
                 .topicId(TOPIC_UNIQUE_ID)
                 .title(VOTACAO_TITLE)
                 .description(DESCRIPTION)
@@ -77,7 +77,7 @@ class SessionServiceTest {
     void shouldCreateSessionAndValidateAttributes() {
         SessionCreatedResponse expect = SessionCreatedResponse.builder()
                 .sessionId(UUID_SESSION_TEST)
-                .topicEntityDTO(this.topicDTO)
+                .topicVotedDTO(this.topicDTO)
                 .isOpen(true)
                 .startTime(this.startDateTime)
                 .endTime(this.startDateTime.plusMinutes(VOTING_DURATION))
@@ -102,7 +102,7 @@ class SessionServiceTest {
         assertNotNull(actual);
         SessionEntity captorValue = this.sessionCaptor.getValue();
         assertTrue(UuidUtils.isValidUUID(actual.getSessionId()));
-        assertEquals(expect.getTopicEntityDTO().getTopicId(), actual.getTopicEntityDTO().getTopicId());
+        assertEquals(expect.getTopicVotedDTO().getTopicId(), actual.getTopicVotedDTO().getTopicId());
         assertEquals(expect.isOpen(), actual.isOpen());
         assertNotNull(actual.getStartTime());
         assertNotNull(actual.getEndTime());

@@ -7,20 +7,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Getter
 @Setter
-@Builder
-public class SessionCreatedResponse {
+public class CountVotesResponse {
 
-    private String sessionId;
-    private TopicVotedDTO topicVotedDTO;
-    private boolean isOpen;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-
+    private TopicVotedDTO topicVoted;
+    private int votesSum;
+    private int totalVotesInFavor;
+    private int totalVotesAgainst;
 
 }

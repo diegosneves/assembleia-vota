@@ -13,8 +13,8 @@ import lombok.Setter;
 @Builder
 public class TopicVotedDTO {
 
+    private String topicId;
     private String title;
     private String description;
     private Integer votingSessionDuration;
-
 }
