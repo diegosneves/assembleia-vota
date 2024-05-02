@@ -58,8 +58,8 @@ public class OpenApiConfig {
      */
     private List<Tag> getTags() {
         return List.of(
-                new Tag().name("Associados").description("Funcionalidades direcionadas aos Associados"),
-                new Tag().name("Pautas").description("Funcionalidades direcionadas as Pautas"),
-                new Tag().name("Votos").description("Funcionalidades direcionadas aos Votos"));
+                new Tag().name("Pautas").description("Funcionalidades direcionadas às Pautas"),
+                new Tag().name("Sessão").description("Funcionalidades voltadas para as Sessões"),
+                new Tag().name("Votos").description("Funcionalidades relacionadas à coleta e contagem de Votos"));
     }
 }

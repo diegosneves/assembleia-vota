@@ -1,6 +1,6 @@
 package diegosneves.github.assembleiavota.exceptions;
 
-import diegosneves.github.assembleiavota.enums.ExceptionHandler;
+import diegosneves.github.assembleiavota.enums.ExceptionDetails;
 
 /**
  * Classe {@link InvalidTopicStringAttributeException} é uma classe para lidar com exceções específicas
@@ -8,12 +8,12 @@ import diegosneves.github.assembleiavota.enums.ExceptionHandler;
  * Esta classe estende {@link RuntimeException}, o que significa que as exceções desses tipos
  * são unchecked/irrecuperáveis.
  * <p>
- *
+ * @see RuntimeException
  * @author diegoneves
  */
 public class InvalidTopicStringAttributeException extends RuntimeException {
 
-    public static final ExceptionHandler ERROR = ExceptionHandler.TOPIC_ATTRIBUTE_INVALID;
+    public static final ExceptionDetails ERROR = ExceptionDetails.INVALID_FIELD;
 
     /**
      * Construtor que cria uma nova exceção com uma mensagem de erro padrão.
