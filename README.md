@@ -133,7 +133,7 @@ FISCAL_PORT=8001
    Agora você pode iniciar os serviços com o seguinte comando:
 
 ```shell
-docker compose up -d
+docker compose -f compose-dev.yaml up -d
 ```
 
 > ### Observações sobre Compatibilidade
