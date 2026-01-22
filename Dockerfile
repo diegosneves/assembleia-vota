@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-alpine
+FROM amazoncorretto:17-alpine
 
 ARG DB_NAME
 ARG DB_USERNAME
