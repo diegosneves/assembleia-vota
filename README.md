@@ -75,6 +75,7 @@ Os seguintes passos descrevem como configurar e executar o projeto usando Docker
 1. **Crie o arquivo compose.yaml:**
 
     Crie um novo arquivo chamado `compose.yaml` no diretório desejado em sua máquina local e copie o conteúdo abaixo para este arquivo:
+
 ```yaml
 services:
   database:
@@ -108,6 +109,49 @@ services:
       - FISCAL_HOST=validator-fiscal-app
       - FISCAL_PORT=8001
     entrypoint: sh -c "dockerize -wait tcp://database:3306 -timeout 60s && java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar target/assembleia-vota.jar"
+
+volumes:
+  db-mysql-assembleia:
+
+```
+
+- Para rodar no Mac:
+```yaml
+services:
+  database:
+    image: "mysql:latest"
+    container_name: assembleia_mysql_db
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - db-mysql-assembleia:/var/lib/mysql
+
+  validator-fiscal-app:
+    image: diegoneves/validator-fiscal:latest
+    platform: linux/amd64
+    container_name: validator_fiscal_api
+    ports:
+      - "8001:8001"
+
+  assembleia-app:
+    image: diegoneves/assembleia-vota:latest
+    platform: linux/amd64
+    container_name: assembleia_vota_api
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    depends_on:
+      - database
+    environment:
+      - DB_HOST=database
+      - DB_PORT=3306
+      - FISCAL_HOST=validator-fiscal-app
+      - FISCAL_PORT=8001
+      - WAIT_FOR=d48601a8a90c3d22fade68d09b4240739fb44a46 # v2.2.4
+    entrypoint: sh -c "wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$${WAIT_FOR}/wait-for | sh -s -- $${DB_HOST}:$${DB_PORT} -t 20 -- java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar target/assembleia-vota.jar"
 
 volumes:
   db-mysql-assembleia:
